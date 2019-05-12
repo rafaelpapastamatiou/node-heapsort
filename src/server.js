@@ -34,7 +34,7 @@ class App {
     nunjucks.configure(path.resolve(__dirname, "app", "views"), {
       watch: this.isDev,
       express: this.express,
-      autoescape: true
+      autoescape: false
     });
     this.express.use(express.static(path.resolve(__dirname, "public")));
     this.express.set("view engine", "njk");

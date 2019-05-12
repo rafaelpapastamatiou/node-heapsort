@@ -8,19 +8,14 @@ let stringHeapJson = [];
 let pause = false;
 let array_length;
 const Treant = require("treant-js");
-
+let vetor = Array(15)
+  .fill()
+  .map(() => Math.round(Math.random() * 499));
 class HeapSortController {
   async index(req, res) {
-    //console.log(vetor);
-    let vetor = Array(15)
-      .fill()
-      .map(() => Math.round(Math.random() * 499));
+    console.log(vetor);
     await this.heapSort(vetor, res);
-    res.render("heapsort", {
-      maxTree: JSON.stringify(stringMaxHeapJson[0]),
-      heapTrees: JSON.stringify(stringHeapJson)
-    });
-    //console.log(vetor);
+    console.log(vetor);
   }
   async heap_root(input, i) {
     var left = 2 * i + 1;
@@ -53,8 +48,8 @@ class HeapSortController {
     }
     this.gerarJson(input);
     stringMaxHeapJson = maxHeapJson;
-    //console.log(JSON.stringify(stringMaxHeapJson));
-    //console.log(JSON.stringify(stringMaxHeapJson[0]));
+    this.renderNjk(stringMaxHeapJson, res);
+    pause = 1;
     for (i = input.length - 1; i > 0; i--) {
       if (!pause) {
         this.swap(input, 0, i);
@@ -70,7 +65,7 @@ class HeapSortController {
         i++;
       }
     }
-    //console.log(JSON.stringify(stringMaxHeapJson, null, " "));
+    console.log(JSON.stringify(stringMaxHeapJson, null, " "));
     //console.log(JSON.stringify(stringHeapJson, null, " "));
   }
   gerarJson(input, limite = null) {
@@ -100,7 +95,7 @@ class HeapSortController {
     maxHeapArray.forEach(element => {
       if (element.root) {
         maxHeapJson[0] = {};
-        maxHeapJson[0].text = { name: element.val };
+        maxHeapJson[0].val = element.val;
         maxHeapJson[0].children = [];
         maxHeapJson[0].root = true;
         maxHeapJson[0].id = element.id;
@@ -108,7 +103,7 @@ class HeapSortController {
         p = this.findObjectById(maxHeapJson[0], element.parent);
         if (!p.children) p.children = [];
         p.children.push({
-          text: { name: element.val },
+          val: element.val,
           children: [],
           root: false,
           id: element.id
@@ -132,13 +127,7 @@ class HeapSortController {
     }
   }
   renderNjk(json, res) {
-    res.render("heapsort", { tree: json }, function(err, html) {
-      if (err) {
-        console.log(err);
-        res.status(500).send();
-      }
-      return html;
-    });
+    res.render("heapsort", { tree: json });
   }
 }
 module.exports = new HeapSortController();

@@ -2,11 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" type="text/css"/>
+  <style>
+  body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+body { background: #fff; }
+/* optional Container STYLES */
+.chart { height: 159px; width: 332px; margin: 5px; margin: 5px auto; border: 3px solid #DDD; border-radius: 3px; }
+.node { color: #9CB5ED; border: 2px solid #C8C8C8; border-radius: 3px; }
+.node p { font-size: 20px; line-height: 20px; height: 20px; font-weight: bold; padding: 3px; margin: 0; }
+
+  </style>
 </head>
 <body>
-
+  <div>
+    <div id="tree-simple" style="height: 600px; margin: 5px; width: 900px;"> </div>
+    <div id="tree-simple-multiplas" style="height: 600px; margin: 5px; width: 900px;"> </div>
+  </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.8/raphael.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+  var maxTreeJSON = {{maxTree}}
+  var treesJSON
+  var simple_chart_config = {
+    chart: {
+        container: "#tree-simple"
+    },
+    nodeStructure: maxTreeJSON
+  };
+  const chart = new Treant(simple_chart_config);
+  $("#tree-simple").show()
+  var multChart
+  var treesArray = {{heapTrees}}
+  for(var i = 0; i < treesArray.length; i++){
+  (function(treesArray, i){
+    setTimeout(function(){
+    var treesJSON = treesArray[i] 
+    treesJSON = treesJSON.json[0]
+    var config = {
+    chart: {
+        container: "#tree-simple-multiplas"
+    },
+    nodeStructure: treesJSON
+    };
+    multChart = new Treant(config)
+    }, i * 2000)
+  })(treesArray, i)
+  }
+ </script>
 </html>
