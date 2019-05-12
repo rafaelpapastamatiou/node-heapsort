@@ -1,14 +1,23 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const nunjucks = require("nunjucks");
+const path = require("path");
 class App {
   constructor() {
-    if (!process.env.NODE_ENV) {
+    if (
+      process.env.NODE_ENV != "production" &&
+      process.env.NODE_ENV != "testing"
+    ) {
       require("dotenv-safe").load();
       console.log("dotenv-safe loaded");
+      this.isDev = true;
+    } else {
+      this.isDev = false;
     }
     this.express = express();
     this.middlewares();
+    this.views();
     this.routes();
   }
   configs() {
@@ -20,6 +29,15 @@ class App {
   }
   routes() {
     this.express.use(require("./routes"));
+  }
+  views() {
+    nunjucks.configure(path.resolve(__dirname, "app", "views"), {
+      watch: this.isDev,
+      express: this.express,
+      autoescape: true
+    });
+    this.express.use(express.static(path.resolve(__dirname, "public")));
+    this.express.set("view engine", "njk");
   }
 }
 
