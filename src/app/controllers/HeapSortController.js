@@ -1,20 +1,19 @@
-const socket = require("socket.io")(80);
-const nunjucks = require("nunjucks");
+//const socket = require("socket.io")(80);
+//const nunjucks = require("nunjucks");
 let maxHeapArray = [];
 let maxHeapJson = [];
-let heapJson = [];
+//let heapJson = [];
 let stringMaxHeapJson;
 let stringHeapJson = [];
 let pause = false;
 let array_length;
-const Treant = require("treant-js");
-let vetor = Array(15)
-  .fill()
-  .map(() => Math.round(Math.random() * 499));
+//const Treant = require("treant-js");
 class HeapSortController {
   async index(req, res) {
+  let vetor = Array(15)
+    .fill()
+    .map(() => Math.round(Math.random() * 499));
     //console.log(vetor);
-
     await this.heapSort(vetor, res);
     res.render("heapsort", {
       maxTree: JSON.stringify(stringMaxHeapJson[0]),
@@ -141,6 +140,7 @@ class HeapSortController {
       }
     }
   }
+  /*
   renderNjk(json, res) {
     res.render("heapsort", { tree: json }, function(err, html) {
       if (err) {
@@ -150,5 +150,6 @@ class HeapSortController {
       return html;
     });
   }
+  */
 }
 module.exports = new HeapSortController();
