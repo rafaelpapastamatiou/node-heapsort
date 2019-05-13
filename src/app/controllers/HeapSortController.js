@@ -8,13 +8,13 @@ let stringHeapJson = [];
 let pause = false;
 let array_length;
 const Treant = require("treant-js");
-
+let vetor = Array(15)
+  .fill()
+  .map(() => Math.round(Math.random() * 499));
 class HeapSortController {
   async index(req, res) {
     //console.log(vetor);
-    let vetor = Array(15)
-      .fill()
-      .map(() => Math.round(Math.random() * 499));
+
     await this.heapSort(vetor, res);
     res.render("heapsort", {
       maxTree: JSON.stringify(stringMaxHeapJson[0]),
@@ -22,7 +22,7 @@ class HeapSortController {
     });
     //console.log(vetor);
   }
-  async heap_root(input, i) {
+  async heap_root(input, i, index = null) {
     var left = 2 * i + 1;
     var right = 2 * i + 2;
     var max = i;
@@ -32,9 +32,13 @@ class HeapSortController {
     if (right < array_length && input[right] > input[max]) {
       max = right;
     }
+    if (index) {
+      this.gerarJson(input, index);
+      stringHeapJson.push({ json: maxHeapJson });
+    }
     if (max != i) {
       this.swap(input, i, max);
-      this.heap_root(input, max);
+      this.heap_root(input, max, index ? index : null);
     }
   }
   swap(input, index_A, index_B) {
@@ -43,6 +47,10 @@ class HeapSortController {
     input[index_B] = temp;
   }
   async heapSort(input, res) {
+    stringHeapJson = [];
+    maxHeapArray = [];
+    maxHeapJson = [];
+    stringHeapJson = [];
     array_length = input.length;
     for (var i = Math.floor(array_length / 2); i >= 0; i -= 1) {
       if (!pause) {
@@ -53,6 +61,8 @@ class HeapSortController {
     }
     this.gerarJson(input);
     stringMaxHeapJson = maxHeapJson;
+    stringHeapJson.push({ json: maxHeapJson });
+    stringMaxHeapJson = maxHeapJson;
     //console.log(JSON.stringify(stringMaxHeapJson));
     //console.log(JSON.stringify(stringMaxHeapJson[0]));
     for (i = input.length - 1; i > 0; i--) {
@@ -62,7 +72,7 @@ class HeapSortController {
         this.gerarJson(input, i);
         stringHeapJson.push({ json: maxHeapJson });
         //console.log(maxHeapArray);
-        this.heap_root(input, 0);
+        this.heap_root(input, 0, i);
         this.gerarJson(input, i);
         stringHeapJson.push({ json: maxHeapJson });
         //console.log(maxHeapArray);

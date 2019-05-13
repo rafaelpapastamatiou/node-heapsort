@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" type="text/css"/>
   <style>
   body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
@@ -18,14 +21,20 @@ body { background: #fff; }
   </style>
 </head>
 <body>
-  <div>
-    <div id="tree-simple" style="height: 600px; margin: 5px; width: 900px;"> </div>
-    <div id="tree-simple-multiplas" style="height: 600px; margin: 5px; width: 900px;"> </div>
+  <div class="container-fluid">
+  <br><br>
+    <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 text-center">
+      <h3>Max HEAP</h3>
+      <div id="tree-simple" style=""> </div>
+    </div>
+    <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 text-center">
+     <h3>Ordenação dinâmica:</h3>
+      <div id="tree-simple-multiplas" style=""> </div>
+    </div>
   </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.8/raphael.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
   var maxTreeJSON = {{maxTree}}
   var treesJSON
@@ -39,20 +48,31 @@ body { background: #fff; }
   $("#tree-simple").show()
   var multChart
   var treesArray = {{heapTrees}}
-  for(var i = 0; i < treesArray.length; i++){
-  (function(treesArray, i){
-    setTimeout(function(){
-    var treesJSON = treesArray[i] 
-    treesJSON = treesJSON.json[0]
-    var config = {
-    chart: {
-        container: "#tree-simple-multiplas"
-    },
-    nodeStructure: treesJSON
-    };
-    multChart = new Treant(config)
-    }, i * 2000)
-  })(treesArray, i)
-  }
+  var config
+  config = {
+          chart: {
+              container: "#tree-simple-multiplas"
+          },
+          nodeStructure: treesArray[0].json[0]
+          };
+  multChart = new Treant(config)
+  setTimeout(function(){
+    for(var i = 0; i < treesArray.length; i++){
+      (function(treesArray, i){
+        setTimeout(function(){
+          var treesJSON = treesArray[i] 
+          treesJSON = treesJSON.json[0]
+          config = {
+          chart: {
+              container: "#tree-simple-multiplas"
+          },
+          nodeStructure: treesJSON
+          };
+          multChart = new Treant(config)
+        }, i * 300)
+      })(treesArray, i)
+    }
+  }, 6000)
+  
  </script>
 </html>
